@@ -1,4 +1,10 @@
 #!/bin/python3
+
+# Pide los datos del viento de OpenWindApi, cada request se realiza con un 
+# segundo de delay para no sobrepasar el maximo de requests por minuto (60)
+# Para cambiar la cantidad de muestras que toma en latitudes y longitudes solo 
+# hace falta cambiar "latSamples" y "lonSamples".
+
 import requests
 import sys
 import json
