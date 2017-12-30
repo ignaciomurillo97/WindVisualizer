@@ -7,14 +7,24 @@ class Coordenadas {
   }
   
   PVector GEOtoXYZ(float latitud, float longitud) {
+    float hr = cos(-latitud*(PI/180))*radio;
     PVector cordCartesianas = 
-    new PVector (sin(latitud)*radio, sin(longitud)*radio, cos(latitud)*radio);
+      new PVector (
+        sin(longitud*(PI/180))*hr, 
+        sin(-latitud*(PI/180))*radio, 
+        cos(longitud*(PI/180))*hr
+      );
     return cordCartesianas;
   }
 
 
   PVector XYZtoGEO(PVector cartesiano) {
-    PVector Geo = new PVector(asin(cartesiano.y/radio), atan(cartesiano.x/cartesiano.z));
+    PVector Geo = new PVector(
+    //lat
+    asin(cartesiano.y/radio)/(PI/180)
+    ,//long 
+    asin(cartesiano.x/cartesiano.z)/(PI/180)
+    );
     return Geo;
   }
   
