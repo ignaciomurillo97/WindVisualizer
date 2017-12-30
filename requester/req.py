@@ -12,12 +12,15 @@ from time import *
 
 latSamples = 10
 lonSamples = 10
+outputFileName = "result.json"
 
-sampleDict = {}
+sampleList = []
 
 def main():
     getSamples()
-    print(sampleDict)
+    jsonRes = json.dumps(sampleList)
+    outputFile = open(outputFileName, 'w')
+    outputFile.write(jsonRes)
 
 def getSamples():
     latStep = 180 / latSamples
@@ -29,7 +32,9 @@ def getSamples():
             lon = i * lonStep - 180
             windData = getWindAt(lat, lon)
             if (windData):
-                sampleDict[(lat, lon)] = windData
+                windData["lat"] = lat
+                windData["lon"] = lon
+                sampleList.append(windData);
             else:
                 print("failed at: " + str((lat, lon)))
             sleep(1)
@@ -44,7 +49,7 @@ def getWindAt(lat, lon):
 
 def buildUrl(lat, lon):
     url = "http://api.openweathermap.org/data/2.5/weather?lat="
-    url += str(lat )+"&lon="+ str(lon)
+    url += str(lat)+"&lon="+ str(lon)
     url += "&APPID=d5269ad59d408c881bd47821a970ab87"
     return url 
 

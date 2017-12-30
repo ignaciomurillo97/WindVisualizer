@@ -9,3 +9,6 @@ void draw(){
   g.display();
 }
 
+void loadWindData(){
+  
+}
