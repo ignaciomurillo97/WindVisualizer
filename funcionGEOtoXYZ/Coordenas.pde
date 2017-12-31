@@ -28,4 +28,21 @@ class Coordenadas {
     return Geo;
   }
   
+  
+  //Funcion de Isometria, retorna un par ordenado dada una triada
+    PVector isometriaAngulo(float x, float y, float z){
+      float ry = 0.0;
+        PVector coordenadas2d = new PVector(y - x, -0.6*(x*ry + y*ry - 2*z));
+        return coordenadas2d;
+    }
+
+    PVector isometriaAngulo(float x, float y, float z, float ang){
+      float angulo = ang*(PI/180);
+      float p1 = ((cos(angulo)*x) - (sin(angulo)*y));
+      float p2 = (sin(angulo)*x) + (cos(angulo)*y);
+      float p3 = z;
+        PVector isor = isometriaAngulo(p1 , p2 , p3);
+        return isor;
+    }
+  
 }
