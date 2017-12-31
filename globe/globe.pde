@@ -24,15 +24,3 @@ void draw(){
   pruebaCoordenadas();
 }
 
-void pruebaCoordenadas(){
-  pushMatrix();
-  PVector latlon = new PVector(9.934739, -84.087502);
-  PVector cart = c.GEOtoXYZ(latlon.x, latlon.y);
-  translate(width / 2, height / 2);
-  rotateX(-PI / 6);
-  rotateY(frameCount * -0.01);
-  strokeWeight(5);
-  stroke(255);
-  point(cart.x, cart.y, cart.z);
-  popMatrix();
-}
