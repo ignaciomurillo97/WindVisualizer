@@ -12,14 +12,14 @@ class Coordenadas {
   }
   
   PVector GEOtoXYZ(float latitud, float longitud) {
-    latitud += latOffset;
-    longitud += lonOffset;
+    latitud = radians(latitud + latOffset);
+    longitud = radians(longitud + lonOffset);
+
     float x = radio * sin(longitud) * cos(latitud);
     float z = radio * sin(longitud) * sin(latitud);
     float y = radio * cos(longitud);
     PVector cordCartesianas = 
     new PVector(x, y, z);
-    //new PVector (sin(latitud)*radio, sin(longitud)*radio, cos(latitud)*radio);
     return cordCartesianas;
   }
 

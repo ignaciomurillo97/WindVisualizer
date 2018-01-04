@@ -6,32 +6,48 @@
 # hace falta cambiar "latSamples" y "lonSamples".
 
 import requests
-import sys
 import json
 from time import *
+from sys import *
 
-latSamples = 10
-lonSamples = 10
+params = argv[1:]
+
+latSamples = 5
+lonSamples = 5
+
+if (len(params)):
+    latSamples = int(params[0])
+    lonSamples = int(params[1])
+
+latStep = 180 / latSamples
+lonStep = 360 / lonSamples
+
 outputFileName = "result.json"
 
 sampleList = []
 
 def main():
     getSamples()
-    jsonRes = json.dumps(sampleList)
+    resDict = {"data": sampleList}
+
+    resDict["lonStep"] = lonStep;
+    resDict["latStep"] = latStep;
+
+    resDict["latSamples"] = latSamples;
+    resDict["lonSamples"] = lonSamples;
+
+    jsonRes = json.dumps(resDict)
     outputFile = open(outputFileName, 'w')
     outputFile.write(jsonRes)
 
 def getSamples():
-    latStep = 180 / latSamples
-    lonStep = 360 / lonSamples
     maxSamples = latSamples * lonSamples
     for i in range(latSamples):
         for j in range(lonSamples):
             lat = j * latStep - 90
             lon = i * lonStep - 180
             windData = getWindAt(lat, lon)
-            if (windData):
+            if (windData and windData["speed"] and windData["deg"]):
                 windData["lat"] = lat
                 windData["lon"] = lon
                 sampleList.append(windData);
@@ -58,8 +74,8 @@ def progress(count, total, status=''):
     filledLen = int(round(barLen * count / float(total)))
     percents = round(100.0 * count / float(total), 1)
     bar = '=' * filledLen + '-' * (barLen - filledLen)
-    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
-    sys.stdout.flush()
+    stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    stdout.flush()
 
 if (__name__ == '__main__'):
     main();

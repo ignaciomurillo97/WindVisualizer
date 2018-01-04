@@ -4,17 +4,17 @@ class Globe{
 
   PVector pos;
   float radius;
-  float yRot;
 
   PImage texture;
-  Coordenadas c;
+
+  Coordenadas coord;
 
   Globe(float x, float y, float z, float radius){
-    earth = loadImage("https://upload.wikimedia.org/wikipedia/commons/2/26/PathfinderMap_hires_%284996917742%29.jpg");
+    earth = loadImage("EarthTexture.jpg");
     globe = createShape(SPHERE, radius);
     globe.setTexture(earth);
     globe.setStroke(false);
-    c = new Coordenadas(radius);
+    coord = new Coordenadas(radius);
 
     this.pos = new PVector(x, y, z);
     this.radius = radius;
@@ -26,10 +26,45 @@ class Globe{
   void display(){
     pushMatrix();
     noStroke();
-    translate(width / 2, height / 2);
-    rotateY(yRot);
+    adjustMatrix();
     shape(globe);
     popMatrix();
+  }
+
+  void showFlowField(){
+    WindDataObj[][] windVectors = flowField.windVectors;
+    pushMatrix();
+    adjustMatrix();
+    stroke(255);
+
+    for (int i = 0; i < windVectors.length; i++){
+      for (int j = 0; j < windVectors[0].length; j++){
+        WindDataObj currWindObj = windVectors[i][j];
+        showVector(currWindObj);
+      }
+    }
+
+    popMatrix();
+  }
+
+  void showVector(WindDataObj windData){
+    PVector currentVector = windData.windVector.copy();
+    PVector vectorPos = coord.GEOtoXYZ(windData.lat, windData.lon);
+    PVector latlon = new PVector(windData.lon, windData.lat);
+
+    currentVector.add(latlon);
+    PVector otherPos = coord.GEOtoXYZ(currentVector.y, currentVector.x);
+    line(vectorPos.x, vectorPos.y, vectorPos.z, otherPos.x, otherPos.y, otherPos.z);
+  }
+
+  float radiusMultiplier(float lat){
+    return cos(radians(lat)) * radius;
+  }
+
+  void adjustMatrix(){
+    translate(pos.x, pos.y, pos.z);
+    rotateX(rotZ);
+    rotateY(rotY);
   }
 
 }
