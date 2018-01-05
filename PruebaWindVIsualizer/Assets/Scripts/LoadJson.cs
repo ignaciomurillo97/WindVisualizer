@@ -24,7 +24,9 @@ public class LoadJson : MonoBehaviour {
           string dataAsJson = File.ReadAllText(filePath);
           Debug.Log("datos leidos");
           loadedData = JsonUtility.FromJson<WindData>(dataAsJson);
-          Debug.Log(loadedData.lonStep);
+          //FlowField.loadFlowField(loadedData);
+          FlowField.loadFlowFieldFromPerlin();
+          //Debug.Log(loadedData.data == null);
        } else {
           Debug.LogError("No se puede cargar el archivo");
        }

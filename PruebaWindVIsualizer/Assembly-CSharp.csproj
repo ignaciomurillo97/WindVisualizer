@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\Globe.cs" />
      <Compile Include="Assets\Scripts\LoadJson.cs" />
      <Compile Include="Assets\Scripts\Rotate.cs" />
+     <Compile Include="Assets\Scripts\Test.cs" />
      <Compile Include="Assets\Scripts\WindData.cs" />
      <Compile Include="Assets\Scripts\WindDataPoint.cs" />
  <Reference Include="UnityEngine.UI">

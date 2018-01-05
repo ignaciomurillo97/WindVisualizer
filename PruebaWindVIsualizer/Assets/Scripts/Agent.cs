@@ -7,11 +7,9 @@ public class Agent : MonoBehaviour {
    public GameObject globe;
    public Vector3 velocity;
 
-   public float speed = 10;
    public float globeDistance = 10;
 
    void Start () {
-      FlowField.loadFlowField();
    }
 
    void Update () {
