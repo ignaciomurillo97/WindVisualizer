@@ -7,13 +7,12 @@ public class LoadJson : MonoBehaviour {
 
    public string fileName = "data.json";
    public WindData loadedData;
+   public bool usePerlinNoise;
 
-	// Use this for initialization
 	void Start () {
       LoadData();
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
@@ -24,9 +23,11 @@ public class LoadJson : MonoBehaviour {
           string dataAsJson = File.ReadAllText(filePath);
           Debug.Log("datos leidos");
           loadedData = JsonUtility.FromJson<WindData>(dataAsJson);
-          //FlowField.loadFlowField(loadedData);
-          FlowField.loadFlowFieldFromPerlin();
-          //Debug.Log(loadedData.data == null);
+          if (usePerlinNoise){
+             FlowField.loadFlowFieldFromPerlin();
+          } else {
+             FlowField.loadFlowField(loadedData);
+          }
        } else {
           Debug.LogError("No se puede cargar el archivo");
        }

@@ -10,6 +10,7 @@ public class FlowField {
    static Vector3[,] flowField;
    static int flowFieldWidth;
    static int flowFieldHeight;
+   static float speedMult = 0.5f;
 
    public static void loadFlowFieldFromPerlin(){
       float noiseSize = 5;
@@ -34,27 +35,23 @@ public class FlowField {
       lonStep = wd.lonStep;
 
       WindDataPoint[] data = wd.data;
-      Debug.Log("Wind Data Length" + data.Length);
 
       flowField = new Vector3[(int)wd.latSamples, (int)wd.lonSamples];
       flowFieldWidth = (int)wd.lonSamples;
       flowFieldHeight = (int)wd.latSamples;
-      Debug.Log("width " + flowFieldWidth);
-      Debug.Log("height " + flowFieldHeight);
 
       foreach (WindDataPoint dataPoint in data){
          int i = (int)latToIndex(dataPoint.lat);
          int j = (int)lonToIndex(dataPoint.lon);
-         Debug.Log("indices: " + i + ", " + j);
          flowField[i, j] = getWindVector(dataPoint.deg, dataPoint.speed);
       }
    }
 
    static Vector3 getWindVector(float ang, float speed){
       return new Vector3(
-            Mathf.Sin(ang * Mathf.Deg2Rad),
+            Mathf.Cos(ang * Mathf.Deg2Rad),
             Mathf.Sin(ang * Mathf.Deg2Rad)
-            ) * speed;
+            ) * speed * speedMult;
    }
 
    public static Vector3 velocityAtGeoLocation(float lat, float lon){

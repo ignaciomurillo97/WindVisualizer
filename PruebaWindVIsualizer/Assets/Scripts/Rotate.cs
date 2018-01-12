@@ -1,16 +1,19 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class Rotate : MonoBehaviour
 {
-	float rotSpeed = 20;
+	public float rotSpeed = 20;
 
-	void OnMouseDrag()
-	{
-		float rotX = Input.GetAxis("Mouse X") * rotSpeed * Mathf.Deg2Rad;
-		float rotY = Input.GetAxis("Mouse Y") * rotSpeed * Mathf.Deg2Rad;
+   void Start(){
+      
+   }
 
-		transform.RotateAround(Vector3.up, -rotX);
-		transform.RotateAround(Vector3.right, rotY);
-	}
-}﻿
+   void Update(){
+         float rotX = Input.GetAxis("Mouse X") * -rotSpeed * Mathf.Deg2Rad;
+         float rotY = Input.GetAxis("Mouse Y") * rotSpeed * Mathf.Deg2Rad;
+
+         transform.Rotate(new Vector3(0, rotX, 0), Space.World);
+         transform.Rotate(new Vector3(rotY, 0, 0), Space.Self);
+   }
+}

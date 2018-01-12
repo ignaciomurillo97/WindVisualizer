@@ -8,12 +8,10 @@ public class Globe : MonoBehaviour {
    public GameObject agentPrefab;
    public float distance;
 
-	// Use this for initialization
 	void Start () {
       generateAgents(distance);
 	}
 
-   // Update is called once per frame
    void Update () {
 
    }
@@ -22,8 +20,8 @@ public class Globe : MonoBehaviour {
       float latSeparation = 180 / (sqrtAgentCount);
       float lonSeparation = 360 / (sqrtAgentCount);
 
-      for (int i = 0; i < sqrtAgentCount; i++){
-         for (int j = 0; j < sqrtAgentCount; j++){
+      for (int i = 0; i <= sqrtAgentCount; i++){
+         for (int j = 0; j <= sqrtAgentCount; j++){
             float lat = latSeparation * i;
             float lon = lonSeparation * j;
             addAgent(lat, lon, distance);

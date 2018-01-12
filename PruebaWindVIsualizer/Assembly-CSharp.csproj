@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Agent.cs" />
+     <Compile Include="Assets\Scripts\CameraControl.cs" />
      <Compile Include="Assets\Scripts\Coordenadas.cs" />
      <Compile Include="Assets\Scripts\FlowField.cs" />
      <Compile Include="Assets\Scripts\Globe.cs" />
@@ -60,6 +61,7 @@
      <Compile Include="Assets\Scripts\Test.cs" />
      <Compile Include="Assets\Scripts\WindData.cs" />
      <Compile Include="Assets\Scripts\WindDataPoint.cs" />
+     <None Include="Assets\Materials\Materials\Planet.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

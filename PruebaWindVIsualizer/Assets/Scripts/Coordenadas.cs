@@ -11,9 +11,9 @@ public class Coordenadas {
       latitud = (latitud + latOffset) * Mathf.Deg2Rad;
       longitud = (longitud + lonOffset) * Mathf.Deg2Rad;
 
-      float x = radio * Mathf.Sin(longitud) * Mathf.Cos(latitud);
-      float z = radio * Mathf.Sin(longitud) * Mathf.Sin(latitud);
-      float y = radio * Mathf.Cos(longitud);
+      float x = radio * Mathf.Sin(latitud) * Mathf.Cos(longitud);
+      float z = radio * Mathf.Sin(latitud) * Mathf.Sin(longitud);
+      float y = radio * Mathf.Cos(latitud);
 
       Vector3 cordCartesianas = new Vector3(x, y, z);
       return cordCartesianas;

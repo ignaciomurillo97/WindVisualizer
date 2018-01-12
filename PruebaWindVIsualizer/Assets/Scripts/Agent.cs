@@ -13,13 +13,18 @@ public class Agent : MonoBehaviour {
    }
 
    void Update () {
-      faceGlobe();
-      transform.Translate(velocity * Time.deltaTime, Space.Self);
+      displace(velocity);
       Vector3 coordenates = getCoordenates();
       velocity = FlowField.velocityAtGeoLocation(coordenates.x, coordenates.y);
-      velocity = velocity * 0.1f;
+      velocity = velocity * 0.01f;
    }
 
+   void displace (Vector3 v) {
+      float elevation = Mathf.Atan(v.y / globeDistance) * Mathf.Rad2Deg;
+      float azimuth = Mathf.Atan(v.x / globeDistance) * Mathf.Rad2Deg;
+      transform.RotateAround(globe.transform.position, transform.right, elevation);
+      transform.RotateAround(globe.transform.position, Vector3.up, elevation);
+   }
 
    void faceGlobe(){
       Vector3 targetDir = globe.transform.position - transform.position;
