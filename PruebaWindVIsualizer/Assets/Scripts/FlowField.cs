@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class FlowField {
 
-   static float latStep;
-   static float lonStep;
+   static public float latStep;
+   static public float lonStep;
 
-   static Vector3[,] flowField;
-   static int flowFieldWidth;
-   static int flowFieldHeight;
-   static float speedMult = 0.5f;
+   static public Vector3[,] flowField;
+   static public int flowFieldWidth;
+   static public int flowFieldHeight;
+   static public float speedMult = 0.5f;
+
+   static public bool isFieldLoaded;
 
    public static void loadFlowFieldFromPerlin(){
       float noiseSize = 5;
@@ -18,7 +20,7 @@ public class FlowField {
       flowFieldWidth = 100;
 
       flowField = new Vector3[flowFieldHeight, flowFieldWidth]; 
-      
+
       latStep = 180 / flowFieldHeight;
       lonStep = 360 / flowFieldWidth;
 
@@ -28,6 +30,7 @@ public class FlowField {
             flowField[i, j] = new Vector3(Mathf.Cos(noise), Mathf.Sin(noise));
          }
       }
+      isFieldLoaded = true;
    }
 
    public static void loadFlowField(WindData wd) {
@@ -45,6 +48,7 @@ public class FlowField {
          int j = (int)lonToIndex(dataPoint.lon);
          flowField[i, j] = getWindVector(dataPoint.deg, dataPoint.speed);
       }
+      isFieldLoaded = true;
    }
 
    static Vector3 getWindVector(float ang, float speed){
@@ -54,12 +58,24 @@ public class FlowField {
             ) * speed * speedMult;
    }
 
-   public static Vector3 velocityAtGeoLocation(float lat, float lon){
+   public static Vector3 velocityAtGeoLocation (float lat, float lon) {
+      if (flowField == null) return Vector3.zero;
+
+      float i = Mathf.Abs(latToIndex(lat));
+      float j = Mathf.Abs(lonToIndex(lon));
+
+      int i1 = (int)i % flowFieldHeight;
+      int j1 = (int)j % flowFieldWidth;
+
+      return flowField[i1, j1];
+   }
+
+   public static Vector3 velocityAtGeoLocation2 (float lat, float lon){
       if (flowField == null) return Vector3.zero;
       float i = Mathf.Abs(latToIndex(lat));
       float j = Mathf.Abs(lonToIndex(lon));
 
-      int i1 = (int)i % flowFieldHeight; 
+      int i1 = (int)i % flowFieldHeight;
       int j1 = (int)j % flowFieldWidth;
 
       int i2 = (i1 + 1) % flowFieldHeight;

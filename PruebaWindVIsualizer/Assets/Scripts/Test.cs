@@ -4,28 +4,23 @@ using UnityEngine;
 
 public class Test : MonoBehaviour {
 
+   public GameObject agentPrefab;
+   public GameObject agent;
+   public GameObject g;
+
+   public float lat; 
+   public float lon;
+   public float distance;
+
 	void Start () {
-		WindData wd = new WindData();
-      wd.lonStep = 10;
-      wd.latStep = 10;
-      wd.latSamples = 10;
-      wd.lonSamples = 10;
+      Vector3 agentPos = Coordenadas.GEOtoXYZ(lat, lon, distance);
+      agent = Instantiate(agentPrefab, agentPos, Quaternion.identity);
 
-      wd.data = new WindDataPoint[1];
-      WindDataPoint dataPoint = new WindDataPoint();
-      dataPoint.speed = 10;
-      dataPoint.deg = 10;
-      dataPoint.lat = 10;
-      dataPoint.lon = 10;
-
-      wd.data[0] = dataPoint;
-
-      Debug.Log("Iniciando Json");
-      string json = JsonUtility.ToJson(wd); 
-      Debug.Log("Json: " + json);
+      Agent a = agent.GetComponent<Agent>();
+      a.globe = g;
+      Vector3 agentCoordenates = a.getCoordenates();
 	}
 	
 	void Update () {
-		
 	}
 }

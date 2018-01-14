@@ -13,10 +13,10 @@ public class Agent : MonoBehaviour {
    }
 
    void Update () {
-      displace(velocity);
       Vector3 coordenates = getCoordenates();
       velocity = FlowField.velocityAtGeoLocation(coordenates.x, coordenates.y);
       velocity = velocity * 0.01f;
+      displace(velocity);
    }
 
    void displace (Vector3 v) {
@@ -26,21 +26,9 @@ public class Agent : MonoBehaviour {
       transform.RotateAround(globe.transform.position, Vector3.up, elevation);
    }
 
-   void faceGlobe(){
-      Vector3 targetDir = globe.transform.position - transform.position;
-      transform.rotation = Quaternion.identity;
-      transform.rotation = Quaternion.LookRotation(targetDir);
-   }
-
-   void mantainDistance() {
-      Vector3 offset = transform.position - globe.transform.position;
-      offset.Normalize();
-      offset *= globeDistance;
-      transform.position += globe.transform.position + offset;
-   }
-
-   Vector3 getCoordenates(){
+   public Vector3 getCoordenates(){
       Vector3 offset = transform.position - globe.transform.position;
       return Coordenadas.XYZtoGEO(offset);
    }
+
 }
