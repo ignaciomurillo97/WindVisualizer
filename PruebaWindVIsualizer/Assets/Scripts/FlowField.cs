@@ -10,14 +10,14 @@ public class FlowField {
    static public Vector3[,] flowField;
    static public int flowFieldWidth;
    static public int flowFieldHeight;
-   static public float speedMult = 0.5f;
+   static public float speedMult = 0.005f;
 
    static public bool isFieldLoaded;
 
    public static void loadFlowFieldFromPerlin(){
       float noiseSize = 5;
-      flowFieldHeight = 100;
-      flowFieldWidth = 100;
+      flowFieldHeight = 50;
+      flowFieldWidth = 50;
 
       flowField = new Vector3[flowFieldHeight, flowFieldWidth]; 
 
@@ -58,7 +58,7 @@ public class FlowField {
             ) * speed * speedMult;
    }
 
-   public static Vector3 velocityAtGeoLocation (float lat, float lon) {
+   public static Vector3 velocityAtGeoLocation2 (float lat, float lon) {
       if (flowField == null) return Vector3.zero;
 
       float i = Mathf.Abs(latToIndex(lat));
@@ -70,10 +70,10 @@ public class FlowField {
       return flowField[i1, j1];
    }
 
-   public static Vector3 velocityAtGeoLocation2 (float lat, float lon){
+   public static Vector3 velocityAtGeoLocation (float lat, float lon){
       if (flowField == null) return Vector3.zero;
-      float i = Mathf.Abs(latToIndex(lat));
-      float j = Mathf.Abs(lonToIndex(lon));
+      float i = latToMatrixCoord(lat);
+      float j = lonToMatrixCoord(lon);
 
       int i1 = (int)i % flowFieldHeight;
       int j1 = (int)j % flowFieldWidth;
@@ -90,15 +90,17 @@ public class FlowField {
       float percentI = i - i1;
       float percentJ = j - j1;
 
+      //Debug.Log("Percentages: " + percentI + ", " + percentJ + ";");
+
       Vector3 p1 = flowField[i1, j1];
       Vector3 p2 = flowField[i2, j2];
       Vector3 p3 = flowField[i3, j3];
       Vector3 p4 = flowField[i4, j4];
 
-      Vector3 p12 = Vector3.Lerp(p1, p2, percentI);
-      Vector3 p34 = Vector3.Lerp(p3, p4, percentI);
+      Vector3 p12 = Vector3.Slerp(p1, p2, percentI);
+      Vector3 p34 = Vector3.Slerp(p3, p4, percentI);
 
-      Vector3 res = Vector3.Lerp(p12, p34, percentJ);
+      Vector3 res = Vector3.Slerp(p12, p34, percentJ);
       return res; 
    }
 
@@ -108,6 +110,14 @@ public class FlowField {
 
    static int lonToIndex(float lon){
       return (int)((lon + 180) / lonStep);
+   }
+
+   static float latToMatrixCoord(float lat){
+      return (lat + 90) / latStep;   
+   }
+
+   static float lonToMatrixCoord(float lon){
+      return (lon + 180) / lonStep;
    }
 
    static float indexToLat(float index){

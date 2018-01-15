@@ -13,7 +13,7 @@ public class Globe : MonoBehaviour {
    public bool flowFieldDisplayed;
 
    void Start () {
-
+      generateAgents(distance);
    }
 
    void Update () {
@@ -24,10 +24,10 @@ public class Globe : MonoBehaviour {
       float latSeparation = 180 / (sqrtAgentCount);
       float lonSeparation = 360 / (sqrtAgentCount);
 
-      for (int i = 0; i <= sqrtAgentCount; i++){
-         for (int j = 0; j <= sqrtAgentCount; j++){
-            float lat = latSeparation * i;
-            float lon = lonSeparation * j;
+      for (int i = 0; i < sqrtAgentCount; i++){
+         for (int j = 0; j < sqrtAgentCount; j++){
+            float lat = latSeparation * (i - sqrtAgentCount/2);
+            float lon = lonSeparation * (j - sqrtAgentCount/2);
             addAgent(lat, lon);
          }
       }
@@ -47,7 +47,11 @@ public class Globe : MonoBehaviour {
          for (int i = 0; i < FlowField.flowFieldHeight; i++){
             for (int j = 0; j < FlowField.flowFieldWidth; j++){
                Vector3 currVector = flowField[i, j];
-               addVector (i * FlowField.latStep, j * FlowField.lonStep, currVector);
+
+               float lat = FlowField.latStep * (i - FlowField.flowFieldHeight / 2);
+               float lon = FlowField.lonStep * j;
+
+               addVector (lat, lon, currVector);
             }
          }
       }
@@ -61,7 +65,7 @@ public class Globe : MonoBehaviour {
 
       VectorDisplay vd = currVector.GetComponent<VectorDisplay>();
       vd.SetVector (flowFieldVector);
-      currVector.transform.parent = transform; 
+      currVector.transform.parent = transform;
    }
 
 }

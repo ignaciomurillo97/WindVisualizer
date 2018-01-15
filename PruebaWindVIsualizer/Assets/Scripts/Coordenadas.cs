@@ -8,7 +8,7 @@ public class Coordenadas {
    static float lonOffset;
    
    static public Vector3 GEOtoXYZ(float latitud, float longitud, float radio) {
-      latitud = (latitud + latOffset) * Mathf.Deg2Rad;
+      latitud = (latOffset - latitud) * Mathf.Deg2Rad;
       longitud = (longitud + lonOffset) * Mathf.Deg2Rad;
 
       float x = radio * Mathf.Sin(latitud + (Mathf.PI / 2)) * Mathf.Cos(longitud);
@@ -20,8 +20,8 @@ public class Coordenadas {
    }
 
    static public Vector3 XYZtoGEO(Vector3 coord) {
-      float lat = Mathf.Acos(coord.y / coord.magnitude) * Mathf.Rad2Deg - 90;
-      float lon = Mathf.Atan(coord.z / coord.x) * Mathf.Rad2Deg;
+      float lat = 90 - Mathf.Acos(coord.y / coord.magnitude) * Mathf.Rad2Deg;
+      float lon = Mathf.Atan2(coord.z, coord.x) * Mathf.Rad2Deg;
       return new Vector3(lat, lon);
    }
 
