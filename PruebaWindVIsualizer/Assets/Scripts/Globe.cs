@@ -11,9 +11,11 @@ public class Globe : MonoBehaviour {
    public GameObject vectorDisplayPrefab;
 
    public bool flowFieldDisplayed;
+   public List<GameObject> vectorArray;
 
    void Start () {
       generateAgents(distance);
+      generateFlowField();
    }
 
    void Update () {
@@ -42,17 +44,23 @@ public class Globe : MonoBehaviour {
    }
 
    public void displayFlowField() {
-      if (!flowFieldDisplayed){
-         Vector3[,] flowField = FlowField.flowField;
-         for (int i = 0; i < FlowField.flowFieldHeight; i++){
-            for (int j = 0; j < FlowField.flowFieldWidth; j++){
-               Vector3 currVector = flowField[i, j];
+      flowFieldDisplayed = !flowFieldDisplayed; 
+      foreach (GameObject g in vectorArray){
+         g.SetActive(flowFieldDisplayed);
+      }
 
-               float lat = FlowField.latStep * (i - FlowField.flowFieldHeight / 2);
-               float lon = FlowField.lonStep * j;
+   }
 
-               addVector (lat, lon, currVector);
-            }
+   public void generateFlowField () {
+      Vector3[,] flowField = FlowField.flowField;
+      for (int i = 0; i < FlowField.flowFieldHeight; i++){
+         for (int j = 0; j < FlowField.flowFieldWidth; j++){
+            Vector3 currVector = flowField[i, j];
+
+            float lat = FlowField.latStep * (i - FlowField.flowFieldHeight / 2);
+            float lon = FlowField.lonStep * j;
+
+            addVector (lat, lon, currVector);
          }
       }
    }
@@ -62,6 +70,7 @@ public class Globe : MonoBehaviour {
       flowFieldVector = Coordenadas.GEOtoXYZ(lat + flowFieldVector.y, flowFieldVector.x + lon, distance);
 
       GameObject currVector = Instantiate (vectorDisplayPrefab, pos, Quaternion.identity);
+      vectorArray.Add(currVector);
 
       VectorDisplay vd = currVector.GetComponent<VectorDisplay>();
       vd.SetVector (flowFieldVector);

@@ -10,6 +10,7 @@ public class GuiManager : MonoBehaviour {
    public GameObject particleGeneratorPrefab;
 
    public ParticleGenerator activeParticleGenerator; 
+   public GameObject activeParticleGeneratorObject; 
 
    public Button ShowFlowField;
    public Button ApplyButton;
@@ -24,28 +25,49 @@ public class GuiManager : MonoBehaviour {
    public Slider cohesionPercent;
    public Slider alignmentPercent;
 
+   public Slider lifetime;
+   public Slider rate;
+
+   public Material mat1;
+   public Material mat2;
+
 	void Start () {
 		ShowFlowField.onClick.AddListener(ShowFlowFieldClicked);
 		ApplyButton.onClick.AddListener(ApplyChanges);
 	}
 	
 	void Update () {
-      if (Input.GetMouseButtonUp(1)){
-         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-         RaycastHit hit;
+      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+      RaycastHit hit;
 
-         if (Physics.Raycast(ray, out hit)) {
-            if (hit.transform.tag == "Globe") {
-               Vector3 latlon = Coordenadas.XYZtoGEO(hit.point);
-               GameObject particleGen = Instantiate(particleGeneratorPrefab, hit.point, Quaternion.identity);
-               particleGen.transform.LookAt(Vector3.zero);
-               activeParticleGenerator = particleGen.GetComponent<ParticleGenerator>();
-               activeParticleGenerator.globe = globeObject;
-               ApplyChanges();
-            } else if (hit.transform.tag == "ParticleGenerator"){
-               activeParticleGenerator = hit.transform.GetComponent<ParticleGenerator>();
-               ReadValues();
+      if (Physics.Raycast(ray, out hit)) {
+         if (hit.transform.tag == "Globe" && Input.GetMouseButton(1)) {
+            Vector3 latlon = Coordenadas.XYZtoGEO(hit.point);
+            GameObject particleGen = Instantiate(particleGeneratorPrefab, hit.point, Quaternion.identity);
+            particleGen.transform.LookAt(Vector3.zero);
+            activeParticleGenerator = particleGen.GetComponent<ParticleGenerator>();
+            activeParticleGenerator.globe = globeObject;
+            ApplyChanges();
+
+            Renderer renderer; 
+            if (activeParticleGeneratorObject != null){
+               renderer = activeParticleGeneratorObject.GetComponent<Renderer>();
+               renderer.sharedMaterial = mat1;
             }
+            activeParticleGeneratorObject = particleGen;
+            renderer = activeParticleGeneratorObject.GetComponent<Renderer>(); 
+            renderer.sharedMaterial = mat2;
+         } else if (hit.transform.tag == "ParticleGenerator" && Input.GetMouseButton(0)){
+            Renderer renderer; 
+            if (activeParticleGeneratorObject != null){
+               renderer = activeParticleGeneratorObject.GetComponent<Renderer>();
+               renderer.sharedMaterial = mat1;
+            }
+            activeParticleGeneratorObject = hit.transform.gameObject;
+            activeParticleGenerator = hit.transform.GetComponent<ParticleGenerator>();
+            renderer = activeParticleGeneratorObject.transform.GetComponent<Renderer>();
+            renderer.sharedMaterial = mat2;
+            ReadValues();
          }
       }
    }
@@ -65,6 +87,8 @@ public class GuiManager : MonoBehaviour {
          activeParticleGenerator.separationPercent = separationPercent.value;
          activeParticleGenerator.cohesionPercent = cohesionPercent.value;
          activeParticleGenerator.alignmentPercent = alignmentPercent.value;
+         activeParticleGenerator.lifetime = lifetime.value;
+         activeParticleGenerator.rate = (int)rate.value;
       }
    }
 
@@ -79,6 +103,8 @@ public class GuiManager : MonoBehaviour {
          separationPercent.value = activeParticleGenerator.separationPercent;
          cohesionPercent.value = activeParticleGenerator.cohesionPercent;
          alignmentPercent.value = activeParticleGenerator.alignmentPercent;
+         lifetime.value = activeParticleGenerator.lifetime;
+         rate.value = activeParticleGenerator.rate;
       }
    }
 

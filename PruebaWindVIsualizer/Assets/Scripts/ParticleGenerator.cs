@@ -21,18 +21,21 @@ public class ParticleGenerator : MonoBehaviour {
    public float separationPercent;
    public float cohesionPercent;
    public float alignmentPercent;
+   public float lifetime;
 
 	void Start () {
-		deltaParticleTime = 1 / rate;
       nextParticleTime = Time.time + deltaParticleTime;
 	}
 	
 	void Update () {
-		if (Time.time > deltaParticleTime){
-         nextParticleTime = Time.time + deltaParticleTime;
-         addVehicle ();
+      if (rate != 0){
+         deltaParticleTime = 1 / rate;
+         if (Time.time > deltaParticleTime){
+            nextParticleTime = Time.time + deltaParticleTime;
+            addVehicle ();
+         }
       }
-	}
+   }
 
    void addVehicle (){
       GameObject currVehicle = Instantiate(vehiclePrefab, transform.position, Quaternion.identity);
@@ -55,6 +58,7 @@ public class ParticleGenerator : MonoBehaviour {
       v.separationPercent = separationPercent;
       v.cohesionPercent = cohesionPercent;
       v.alignmentPercent = alignmentPercent;
+      v.lifeTime = lifetime;
    }
 
    Vector3 randomVelocity(){
